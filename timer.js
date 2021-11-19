@@ -2,14 +2,15 @@ const pomodoro={
     min:1,
     sec:0,
     countime:1,
-    interval:30,
-    restInterval:5,
+    interval:30,//作業時間
+    restInterval:5,//休憩時間
     timer_id:0,
     setnum:1,
-    setbtn:true,
+    state:true,
     goaltime:new Date(),
     pomoStart(){//ボタン押したとき
         this.countime = 1;
+        this.state = false;
         this.goaltime = new Date();
         this.goaltime.setMinutes(this.goaltime.getMinutes() +this.interval);
         clearTimeout(pomodoro.timer_id);
@@ -17,9 +18,11 @@ const pomodoro={
     },
     pomoTimer(now){//残り時間算出
         this.countime = this.goaltime.getTime()-now.getTime();
-        //console.log(this.counttime);
-        //console.log(this.goaltime);
-        //console.log(now);
+        if(this.countime>this.restInterval*60000){//休憩ですか
+            this.state =true;
+        }else{
+            this.state =false;
+        }
         this.sec = Math.floor(this.countime/1000) % 60;
         this.min = Math.floor(this.countime/1000/60) % 60;
         //this.hours = Math.floor(this.counttime/1000/60/60) % 24;
@@ -29,7 +32,7 @@ const pomodoro={
         let s = document.getElementById('sec');
         m.innerText = this.min;
         s.innerText = this.sec;
-        if(this.countime>300000){
+        if(this.state){
             m.style.color = "red";
             s.style.color = "red";
         }else{
