@@ -16,22 +16,33 @@ const pomodoro={
         reload();
     },
     pomoTimer(now){//残り時間算出
-        let count = this.goaltime.getTime()-now.getTime();
-        this.countime = count;
+        this.countime = this.goaltime.getTime()-now.getTime();
         //console.log(this.counttime);
         //console.log(this.goaltime);
         //console.log(now);
-        this.sec = Math.floor(count/1000) % 60;
-        this.min = Math.floor(count/1000/60) % 60;
+        this.sec = Math.floor(this.countime/1000) % 60;
+        this.min = Math.floor(this.countime/1000/60) % 60;
         //this.hours = Math.floor(this.counttime/1000/60/60) % 24;
     },
+    pomoShow(){//画面表示
+        let m = document.getElementById('min');
+        let s = document.getElementById('sec');
+        m.innerText = this.min;
+        s.innerText = this.sec;
+        if(this.countime>300000){
+            m.style.color = "red";
+            s.style.color = "red";
+        }else{
+            m.style.color = "black";
+            s.style.color = "black";
+        }
+    }
 };
 
 function reload(){ //タイマーループ
     const nowtime = new Date();
     pomodoro.pomoTimer(nowtime);
-    document.getElementById('min').innerText = pomodoro.min;
-    document.getElementById('sec').innerText = pomodoro.sec;
+    pomodoro.pomoShow();
     if(pomodoro.countime>0){
         pomodoro.timer_id=setTimeout(reload, 1000);
         console.log(pomodoro.countime); 
