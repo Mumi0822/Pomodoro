@@ -8,12 +8,21 @@ const pomodoro={
     setnum:1,
     state:true,
     goaltime:new Date(),
+    runaudio:new Audio('cooking.mp3'),
+    element:document.getElementById('volbtn'),
+    pomoinputChange(){
+        runaudio.volume=this.element.value;
+    },
     pomoStart(){//ボタン押したとき
         this.countime = 1;
         this.state = false;
         this.goaltime = new Date();
+        this.element.addEventListener('input', this.pomoinputChange);
         this.goaltime.setMinutes(this.goaltime.getMinutes() +this.interval);
         clearTimeout(pomodoro.timer_id);
+        this.runaudio.loop= true;
+        this.runaudio.currentTime = 0;
+        this.runaudio.play();
         reload();
     },
     pomoTimer(now){//残り時間算出
@@ -38,6 +47,7 @@ const pomodoro={
         }else{
             m.style.color = "black";
             s.style.color = "black";
+            this.runaudio.pause();
         }
     }
 };
